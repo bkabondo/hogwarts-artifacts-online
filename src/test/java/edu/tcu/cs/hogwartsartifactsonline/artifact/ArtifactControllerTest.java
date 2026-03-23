@@ -1,9 +1,9 @@
 package edu.tcu.cs.hogwartsartifactsonline.artifact;
 
-//import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.ArtifactDto;
 import edu.tcu.cs.hogwartsartifactsonline.system.StatusCode;
-//import edu.tcu.cs.hogwartsartifactsonline.system.exception.ObjectNotFoundException;
+import edu.tcu.cs.hogwartsartifactsonline.system.exception.ObjectNotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +22,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
-//@AutoConfigureMockMvc(addFilters = false) // Turn off Spring Security
+@AutoConfigureMockMvc(addFilters = false) // Turn off Spring Security
 @ActiveProfiles(value = "dev")
 class ArtifactControllerTest {
 
@@ -122,7 +121,7 @@ class ArtifactControllerTest {
     @Test
     void testFindArtifactByIdNotFound() throws Exception {
         // Given
-        given(this.artifactService.findById("1250808601744904191")).willThrow(new ArtifactNotFoundException("artifact", "1250808601744904191"));
+        given(this.artifactService.findById("1250808601744904191")).willThrow(new ObjectNotFoundException("artifact", "1250808601744904191"));
 
         // When and then
         this.mockMvc.perform(get(this.baseUrl + "/artifacts/1250808601744904191").accept(MediaType.APPLICATION_JSON))
@@ -221,12 +220,11 @@ class ArtifactControllerTest {
                 "A new description.",
                 "ImageUrl",
                 null);
-        //String json = this.objectMapper.writeValueAsString(artifactDto);
+        String json = this.objectMapper.writeValueAsString(artifactDto);
 
-        given(this.artifactService.update(eq("1250808601744904192"), Mockito.any(Artifact.class))).willThrow(new ArtifactNotFoundException("artifact", "1250808601744904192"));
+        given(this.artifactService.update(eq("1250808601744904192"), Mockito.any(Artifact.class))).willThrow(new ObjectNotFoundException("artifact", "1250808601744904192"));
 
         // When and then
-        byte[] json = new byte[0];
         this.mockMvc.perform(put(this.baseUrl + "/artifacts/1250808601744904192").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
@@ -250,7 +248,7 @@ class ArtifactControllerTest {
     @Test
     void testDeleteArtifactErrorWithNonExistentId() throws Exception {
         // Given
-        doThrow(new ArtifactNotFoundException("artifact", "1250808601744904191")).when(this.artifactService).delete("1250808601744904191");
+        doThrow(new ObjectNotFoundException("artifact", "1250808601744904191")).when(this.artifactService).delete("1250808601744904191");
 
         // When and then
         this.mockMvc.perform(delete(this.baseUrl + "/artifacts/1250808601744904191").accept(MediaType.APPLICATION_JSON))
