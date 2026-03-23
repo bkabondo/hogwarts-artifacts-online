@@ -258,16 +258,17 @@ class WizardServiceTest {
         assertThat(a.getOwner().getId()).isEqualTo(2);
     }
 
+
+
     @Test
     void testAssignArtifactErrorWithNonExistentArtifactId() {
         // Given
         given(this.artifactRepository.findById("1250808601744904192")).willReturn(Optional.empty());
-
         // When
+
         Throwable thrown = assertThrows(ObjectNotFoundException.class, () -> {
             this.wizardService.assignArtifact(3, "1250808601744904192");
         });
-
         // Then
         assertThat(thrown)
                 .isInstanceOf(ObjectNotFoundException.class)
