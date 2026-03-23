@@ -1,6 +1,5 @@
 package edu.tcu.cs.hogwartsartifactsonline.artifact;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tcu.cs.hogwartsartifactsonline.artifact.dto.ArtifactDto;
@@ -104,7 +103,6 @@ public class ArtifactService {
     public Page<Artifact> findByCriteria(Map<String, String> searchCriteria, Pageable pageable) {
         Specification<Artifact> spec = Specification.unrestricted(); // Start with an unrestricted specification, matching all objects.
 
-        JacksonInject.Value ArtifactSpecs;
         if (StringUtils.hasLength(searchCriteria.get("id"))) {
             spec = spec.and(ArtifactSpecs.hasId(searchCriteria.get("id")));
         }
