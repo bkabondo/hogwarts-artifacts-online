@@ -86,13 +86,13 @@ public class DBDataInitializer implements CommandLineRunner {
 
         artifactRepository.save(a6);
 
-        // Create some users.
+
         HogwartsUser u1 = new HogwartsUser();
         u1.setUsername("john");
         u1.setPassword("123456");
         u1.setEnabled(true);
         u1.setRoles("admin user");
-        // Don't manually set the id for the user, let the database generate it.
+
 
         HogwartsUser u2 = new HogwartsUser();
         u2.setUsername("eric");
