@@ -38,13 +38,7 @@ public class WizardController {
                 .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Find All Success", wizardDtos);
     }
-    @PostMapping
-    public Result addWizard(@Valid @RequestBody WizardDto wizardDto) {
-        Wizard newWizard = this.wizardDtoToWizardConverter.convert(wizardDto);
-        Wizard savedWizard = this.wizardService.save(newWizard);
-        WizardDto savedWizardDto = this.wizardToWizardDtoConverter.convert(savedWizard);
-        return new Result(true, StatusCode.SUCCESS, "Add Success", savedWizardDto);
-    }
+
     @GetMapping("/{wizardId}")
     public Result findWizardById(@PathVariable Integer wizardId) {
         Wizard foundWizard = this.wizardService.findById(wizardId);
@@ -59,11 +53,7 @@ public class WizardController {
         WizardDto savedWizardDto = this.wizardToWizardDtoConverter.convert(savedWizard);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedWizardDto);
     }
-    @PutMapping("/{wizardId}/artifacts/{artifactId}")
-    public Result assignArtifact(@PathVariable Integer wizardId, @PathVariable String artifactId) {
-        this.wizardService.assignArtifact(wizardId, artifactId);
-        return new Result(true, StatusCode.SUCCESS, "Artifact Assignment Success");
-    }
+
     @PutMapping("/{wizardId}")
     public Result updateWizard(@PathVariable Integer wizardId, @Valid @RequestBody WizardDto wizardDto) {
         Wizard update = this.wizardDtoToWizardConverter.convert(wizardDto);
@@ -78,6 +68,10 @@ public class WizardController {
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }
 
-
+    @PutMapping("/{wizardId}/artifacts/{artifactId}")
+    public Result assignArtifact(@PathVariable Integer wizardId, @PathVariable String artifactId) {
+        this.wizardService.assignArtifact(wizardId, artifactId);
+        return new Result(true, StatusCode.SUCCESS, "Artifact Assignment Success");
+    }
 
 }

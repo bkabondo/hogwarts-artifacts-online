@@ -37,7 +37,12 @@ public class ExceptionHandlerAdvice {
         return new Result(false, StatusCode.NOT_FOUND, ex.getMessage());
     }
 
-
+    /**
+     * This handles invalid inputs.
+     *
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     Result handleValidationException(MethodArgumentNotValidException ex) {
@@ -91,19 +96,19 @@ public class ExceptionHandlerAdvice {
     ResponseEntity<Result> handleRestClientException(HttpStatusCodeException ex) throws JsonProcessingException {
         String exceptionMessage = ex.getMessage();
 
-
+        // Replace <EOL> with actual newlines.
         exceptionMessage = exceptionMessage.replace("<EOL>", "\n");
 
-
+        // Extract the JSON part from the string.
         String jsonPart = exceptionMessage.substring(exceptionMessage.indexOf("{"), exceptionMessage.lastIndexOf("}") + 1);
 
-
+        // Create an ObjectMapper instance.
         ObjectMapper mapper = new ObjectMapper();
 
-
+        // Parse the JSON string to a JsonNode.
         JsonNode rootNode = mapper.readTree(jsonPart);
 
-
+        // Extract the message.
         String formattedExceptionMessage = rootNode.path("error").path("message").asText();
 
         return new ResponseEntity<>(
@@ -126,8 +131,12 @@ public class ExceptionHandlerAdvice {
         return new Result(false, StatusCode.INVALID_ARGUMENT, ex.getMessage());
     }
 
-
-
+    /**
+     * Fallback handles any unhandled exceptions.
+     *
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     Result handleOtherException(Exception ex) {

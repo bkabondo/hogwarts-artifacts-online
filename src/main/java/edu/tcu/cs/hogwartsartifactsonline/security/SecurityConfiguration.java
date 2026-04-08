@@ -96,19 +96,12 @@ public class SecurityConfiguration {
                 .build();
     }
 
-   // @Bean
-    //public PasswordEncoder passwordEncoder() {
-      //  return new BCryptPasswordEncoder(12);
-    //}
-
-   @Bean
-    public PasswordEncoder passwordEncoder(){
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
-    }
     }
 
     @Bean
-
     public JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(this.publicKey).privateKey(this.privateKey).build();
         JWKSource<SecurityContext> jwkSet = new ImmutableJWKSet<>(new JWKSet(jwk));
@@ -119,3 +112,43 @@ public class SecurityConfiguration {
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(this.publicKey).build();
     }
+
+    /**
+     * Starting in Spring Boot 3.3.0, a JwtAuthenticationConverter is auto-configured if one of the properties is set:
+     * spring.security.oauth2.resourceserver.jwt.authority-prefix
+     * spring.security.oauth2.resourceserver.jwt.principal-claim-name
+     * spring.security.oauth2.resourceserver.jwt.authorities-claim-name
+     *
+     * So, you can remove this JwtAuthenticationConverter bean definition from your configuration and configure the properties instead.
+     * https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.3-Release-Notes#spring-security-improvements
+     *
+     * In application.yml, add this:
+     *   security:
+     *     oauth2:
+     *       resourceserver:
+     *         jwt:
+     *           authorities-claim-name: authorities
+     *           authority-prefix: ""
+     */
+//    @Bean
+//    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+//        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+//
+//        /*
+//        Let’s say that that your authorization server communicates authorities in a custom claim called "authorities".
+//        In that case, you can configure the claim that JwtAuthenticationConverter should inspect, like so:
+//         */
+//        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
+//
+//        /*
+//        You can also configure the authority prefix to be different as well. The default one is "SCOPE_".
+//        In this project, you need to change it to empty, that is, no prefix!
+//         */
+//        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+//
+//        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+//        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+//        return jwtAuthenticationConverter;
+//    }
+
+}
