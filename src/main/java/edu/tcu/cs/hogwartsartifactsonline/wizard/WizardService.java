@@ -31,14 +31,6 @@ public class WizardService {
                 .orElseThrow(() -> new ObjectNotFoundException("wizard", wizardId));
     }
 
-    public void delete(Integer wizardId) {
-        Wizard wizardToBeDeleted = this.wizardRepository.findById(wizardId)
-                .orElseThrow(() -> new ObjectNotFoundException("wizard", wizardId));
-
-        // Before deletion, we will unassign this wizard's owned artifacts.
-        wizardToBeDeleted.removeAllArtifacts();
-        this.wizardRepository.deleteById(wizardId);
-    }
     public Wizard save(Wizard newWizard) {
         return this.wizardRepository.save(newWizard);
     }
@@ -53,7 +45,14 @@ public class WizardService {
                 .orElseThrow(() -> new ObjectNotFoundException("wizard", wizardId));
     }
 
+    public void delete(Integer wizardId) {
+        Wizard wizardToBeDeleted = this.wizardRepository.findById(wizardId)
+                .orElseThrow(() -> new ObjectNotFoundException("wizard", wizardId));
 
+        // Before deletion, we will unassign this wizard's owned artifacts.
+        wizardToBeDeleted.removeAllArtifacts();
+        this.wizardRepository.deleteById(wizardId);
+    }
 
     public void assignArtifact(Integer wizardId, String artifactId){
         // Find this artifact by Id from DB.
