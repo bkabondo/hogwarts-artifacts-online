@@ -114,11 +114,6 @@ public class SecurityConfiguration {
     }
 
     /**
-     * Starting in Spring Boot 3.3.0, a JwtAuthenticationConverter is auto-configured if one of the properties is set:
-     * spring.security.oauth2.resourceserver.jwt.authority-prefix
-     * spring.security.oauth2.resourceserver.jwt.principal-claim-name
-     * spring.security.oauth2.resourceserver.jwt.authorities-claim-name
-     *
      * So, you can remove this JwtAuthenticationConverter bean definition from your configuration and configure the properties instead.
      * https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.3-Release-Notes#spring-security-improvements
      *

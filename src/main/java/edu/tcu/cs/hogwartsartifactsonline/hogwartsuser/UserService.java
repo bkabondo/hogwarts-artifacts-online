@@ -68,7 +68,6 @@ public class UserService implements UserDetailsService {
             oldHogwartsUser.setEnabled(update.isEnabled());
             oldHogwartsUser.setRoles(update.getRoles());
 
-            // Revoke this user's current JWT by deleting it from Redis
             this.redisCacheClient.delete("whitelist:" + userId);
         }
         return this.userRepository.save(oldHogwartsUser);
@@ -114,5 +113,4 @@ public class UserService implements UserDetailsService {
         this.redisCacheClient.delete("whitelist:" + userId);
         this.userRepository.save(hogwartsUser);
     }
-
 }
